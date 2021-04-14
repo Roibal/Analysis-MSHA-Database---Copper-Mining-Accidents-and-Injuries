@@ -44,10 +44,32 @@ def main():
                  21:'Caught',22:'Caught',23:'Caught',24: 'Caught', 25:'NEC',26: "NEC", 27:"Over-Exertion",28:"Over-Exertion",29:"Over-Exertion",30:"Over-Exertion", 31:"Contact",
                  32:"Contact",33:"Contact",34:"Contact",35: "Contact", 36:"Inhalation/Ingestion",37:"Inhalation/Ingestion",38: "Inhalation/Ingestion",
                  39:"Flash Burns",40: "Flash Burns", 41: "Drowning", 42:"Unclassified",43: "Unclassified", 44: "No Injuries"}
+    body_rep = {100:"Head, NEC", 110: "Brain", 120: "Ears", 121: "Ears", 122: "Ears", 130: "Eyes", 140: "Face", 141: "Face",
+                142: "Face", 143: "Face", 144: "Face", 150: "Scalp", 160: "Skull", 170: "Head", 200: "Neck", 300: "Upper Extremities",
+                310: "Arm", 311: "Arm", 312: "Arm", 313: "Arm", 314: "Arm", 320: "Arm", 330: "Hand", 340: "Hand", 350: "Upper Extremities",
+                400: "Trunk", 410: "Abdomen", 420: "Back", 430: "Chest", 440: "Hips", 450: "Shoulders", 460: "Trunk", 500: "Lower Extremities",
+                510: "Leg", 511: "Thigh", 512: "Knee", 513: "Leg", 514: "Leg", 520: "Ankle", 530: "Foot", 540: "Toe", 550: "Lower Extremities",
+                600: "Body Systems", 700: "Multiple Parts", 800: "Body Parts, NEC", 900: "Unclassified"}
+    minemach_rep = {1: "Tramway", 2: "Air Compressor", 3: "Air transportation", 4: "Auger Machine", 5: "Power Shop Tools",
+                    6: "Blow pipe", 7: "Boats", 8: "Bulldozer", 9: "Carriage mounted Drill", 10: "Chute", 11: "Cyclones", 12: "Continuous Miner",
+                    13: "Conveyor", 14: "Crane", 15: "Crusher", 16: "Cutting Machine", 17: "Stone Cutting Machine",
+                    18: "Dredge", 19: "Elevator/Skip", 20: "Electric Drill", 21: "Fan", 22: "Flotation (Mill)",
+                    23: "Forklift", 24: "Front-end Loader", 25: "Gathering Arm Loader", 26: "Grizzlies", 27: "Shotcrete/Gunite",
+                    28: "Non-Powered Handtools", 29: "Powered Handtools", 30: "Hoist", 31: "Hydraulic Jets", 32: "Impactor",
+                    33: "Load-Haul-Dump", 34: "Locomotive", 35: "Longwall Machine", 36: "Longwall subparts",
+                    37: "Mancar, mantrip", 38: "Man lift", 39: "Mill, Grinding", 40: "Milling Machine", 41: "Mine car, underground",
+                    42: "Mine Car, Surface", 43: "Mucking Machine", 44: "Ore Haulage Truck, UG", 45: "Ore Haulage Trucks, Highway",
+                    46: "Package Machine", 47: "Pneumatic Blasting Agent Loader", 48: "Pump", 49: "Raise borer", 50: "Raise Climber",
+                    51: "Raw Coal Storage", 52: "Roadgrader", 53: "Rockdrill", 54: "Roof Bolting Machine", 55: "Rock Dusting Machine",
+                    56: "Rotary Dump", 57: "Scraper Loader", 58: "Screen", 59: "Shortwall Machine", 60: "Dragline, Shovel, BWE",
+                    61: "Shuttle Car", 62: "Skip Pocket", 63: "Slusher", 64: "Tamping Machine", 65: "Track Maintenance",
+                    66: "Tractor [UG]", 67: "Trucks (Non Ore)", 68: "Tugger", 69: "Washers", 70: "Welding Machine", 71: "Machine, NEC"}
 
     state_count = []
     injury_count = []
     database_list = []
+    bodypart_count = []
+    minemach_count = []
     df_acc_list = []
     for i, database in enumerate(mine_data):
         #Load all Data from MSHA DBF file into a Pandas Database
@@ -69,7 +91,7 @@ def main():
 
         df_copper = df[df.SIC == int('10210')]   #Create Dataframe with Copper Ore Only
         tot_days_lost.append(df_copper["DAYSLOST"].sum())
-        database_list.append(df_copper)
+
         df_fatal = df_copper[df_copper['DEGINJ']==int(1)]       #Fatal Injuries
         print("Number of Fatalities: ", len(df_fatal))
         print(df_fatal)
@@ -88,13 +110,21 @@ def main():
         #df_copper.groupby(['DISTRICT']).groups
         df_copper['STATE'].replace(state_rep, inplace=True)     #replacing variables with MSHA database code numbers
         df_copper['ATYPE'].replace(atype_rep, inplace=True)
+        df_copper['PARTBODY'].replace(body_rep, inplace=True)
+        df_copper['MINEMACH'].replace(minemach_rep, inplace=True)
+        database_list.append(df_copper)
         df_state_counts = pd.Series(df_copper['STATE']).value_counts()      #Counting Injury Classification
         df_accident_counts = pd.Series(df_copper['ATYPE']).value_counts()
+        df_body_counts = pd.Series(df_copper['PARTBODY']).value_counts()
+        df_minemach_counts = pd.Series(df_copper['MINEMACH']).value_counts()
         state_count.append([year_list[i], df_state_counts])                 #Entering into list data format
         injury_count.append([year_list[i], df_accident_counts])
+        bodypart_count.append([year_list[i], df_body_counts])
+        minemach_count.append([year_list[i], df_minemach_counts])
 
         #fig, ax = plt.subplots()    #Comment in / out for single / multiple plots
         df_acc_list.append(df_accident_counts)
+        print("YEAR: ", year_list[i])
         print(df_accident_counts)
 
         plt.scatter(df_copper["EXPTOTAL"], df_copper["DAYSLOST"], label=str(year_list[i]))
@@ -107,6 +137,22 @@ def main():
     plt.legend()
     plt.show()
 
+    for g, year in enumerate(bodypart_count):
+        plt.plot(year[1][0:10], label=year_list[g], marker='o', linestyle='None')
+    plt.title("Top 10 Yearly Injured Body Parts, US Copper Mining, 2010-2019")
+    plt.xlabel("Injured Body Part")
+    plt.ylabel("Number of Injuries")
+    plt.legend()
+    plt.show()
+
+    """for g, year in enumerate(minemach_count):
+        plt.hist(year[1][0:10], label=year_list[g], marker='o', linestyle='None')
+    plt.title("Top 10 Yearly Mine Machine Injuries, US Copper Mining, 2010-2019")
+    plt.xlabel("Mine Machine")
+    plt.ylabel("Number of Injuries")
+    plt.legend()
+    plt.show()"""
+
     for i, x in enumerate(df_acc_list):
         plt.plot(x, label=str(year_list[i]), marker='o', linestyle='None')
     plt.title("Accident Type and Total Number, Copper Mining in US, 2010-2019")
@@ -114,6 +160,18 @@ def main():
     plt.ylabel("Number of Yearly Accidents")
     plt.legend()
     plt.show()
+
+    #Need to remove NaN from partbody / dayslost
+    """
+    for i, z in enumerate(database_list):
+        plt.plot(z["PARTBODY"], z["DAYSLOST"], label=str(year_list[i]))
+    plt.title("Body Part Injury and Number of Days Lost, Copper Mining in US, 2010-2019")
+    plt.xlabel("Body Part")
+    plt.ylabel("Number of Days Lost Per Accident")
+    plt.legend()
+    plt.show()
+    """
+
 
     #ax.set_xticklabels(df_state_counts.keys())
 
@@ -227,6 +285,9 @@ def main():
 
     #Draw Graphs based on Day of the Week, Total Time out of Work
     print(days_lost_stats)
+
+    #TO DO:
+    #Output all graphs, data, etc to a file or multiple files
 
 if __name__=="__main__":
     main()
