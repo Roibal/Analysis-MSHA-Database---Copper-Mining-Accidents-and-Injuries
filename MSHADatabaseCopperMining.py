@@ -155,19 +155,43 @@ def main():
 
     #Create Additional Graphs focusing on two highest injured body part (Hand & Back)
     back_list_days =[]
+    mean_back_age =[]
+    mean_back_work =[]
     hand_list_days = []
+    mean_hand_age = []
+    mean_hand_work = []
     for i in range(0, 10):
         #Calculate total yearly days missed for back injury and hand injury
         back_list_days.append(back_list[i]["DAYSLOST"].sum())
+        mean_back_age.append(back_list[i]["AGE"].mean())
+        mean_back_work.append(back_list[i]["EXPTOTAL"].mean())
         hand_list_days.append(hand_list[i]["DAYSLOST"].sum())
-    print(back_list_days)
-    print(hand_list_days)
+        mean_hand_age.append(hand_list[i]["AGE"].mean())
+        mean_hand_work.append(hand_list[i]["EXPTOTAL"].mean())
+    print(mean_back_age)
+    print(mean_hand_age)
 
     plt.plot(year_list, back_list_days, label="Back Injury")
     plt.plot(year_list, hand_list_days, label="Hand Injury")
     plt.title("Comparing Total Days Lost Per Year Hand Injury v Back Injury, US Copper Mining, 2010-2019")
     plt.xlabel("Year")
     plt.ylabel("Total Days Lost")
+    plt.legend()
+    plt.show()
+
+    plt.plot(year_list, mean_back_age, label="Back Injury")
+    plt.plot(year_list, mean_hand_age, label="Hand Injury")
+    plt.title("Comparing Average Age Hand Injury v Back Injury, US Copper Mining, 2010-2019")
+    plt.xlabel("Year")
+    plt.ylabel("Average Age of Miner")
+    plt.legend()
+    plt.show()
+
+    plt.plot(year_list, mean_back_work, label="Back Injury")
+    plt.plot(year_list, mean_hand_work, label="Hand Injury")
+    plt.title("Comparing Average Work Experience Hand Injury v Back Injury, US Copper Mining, 2010-2019")
+    plt.xlabel("Year")
+    plt.ylabel("Average Years of Work Experience")
     plt.legend()
     plt.show()
 
