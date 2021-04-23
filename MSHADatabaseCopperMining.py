@@ -170,29 +170,42 @@ def main():
         mean_hand_work.append(hand_list[i]["EXPTOTAL"].mean())
     print(mean_back_age)
     print(mean_hand_age)
+    width = 0.35
+    fig, ax = plt.subplots()
 
-    plt.plot(year_list, back_list_days, label="Back Injury")
-    plt.plot(year_list, hand_list_days, label="Hand Injury")
-    plt.title("Comparing Total Days Lost Per Year Hand Injury v Back Injury, US Copper Mining, 2010-2019")
-    plt.xlabel("Year")
-    plt.ylabel("Total Days Lost")
+    Back1 = ax.bar(year_list, back_list_days, width, align='edge', label="Back Injury")
+    Hand1 = ax.bar(year_list, hand_list_days, -0.35, align='edge', label="Hand Injury")
+    ax.set_title("Comparing Total Days Lost Per Year Hand Injury v Back Injury, US Copper Mining, 2010-2019")
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Total Days Lost")
+    ax.set_xticks(year_list)
+    ax.set_xticklabels(('2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019'))
     plt.legend()
+    #plt.show()
+    #autolabel(Back1, "left")
+    #autolabel(Hand1, "right")
+
+    fig.tight_layout()
+
     plt.show()
 
-    plt.plot(year_list, mean_back_age, label="Back Injury")
-    plt.plot(year_list, mean_hand_age, label="Hand Injury")
+
+    plt.bar(year_list, mean_back_age, 0.35, align='edge', label="Back Injury")
+    plt.bar(year_list, mean_hand_age, -0.35, align ='edge', label="Hand Injury")
     plt.title("Comparing Average Age Hand Injury v Back Injury, US Copper Mining, 2010-2019")
     plt.xlabel("Year")
     plt.ylabel("Average Age of Miner")
     plt.legend()
+    plt.ylim(30,50)
     plt.show()
 
-    plt.plot(year_list, mean_back_work, label="Back Injury")
-    plt.plot(year_list, mean_hand_work, label="Hand Injury")
+    plt.bar(year_list, mean_back_work, 0.35, align='edge', label="Back Injury")
+    plt.bar(year_list, mean_hand_work, -0.35, align='edge', label="Hand Injury")
     plt.title("Comparing Average Work Experience Hand Injury v Back Injury, US Copper Mining, 2010-2019")
     plt.xlabel("Year")
     plt.ylabel("Average Years of Work Experience")
     plt.legend()
+    plt.ylim(3,10)
     plt.show()
 
     """for g, year in enumerate(minemach_count):
@@ -335,6 +348,26 @@ def main():
 
     #Draw Graphs based on Day of the Week, Total Time out of Work
     print(days_lost_stats)
+
+def autolabel(rects, xpos='center'):
+    """
+    Attach a text label above each bar in *rects*, displaying its height.
+
+    *xpos* indicates which side to place the text w.r.t. the center of
+    the bar. It can be one of the following {'center', 'right', 'left'}.
+    """
+
+    ha = {'center': 'center', 'right': 'left', 'left': 'right'}
+    offset = {'center': 0, 'right': 1, 'left': -1}
+
+    for rect in rects:
+        height = rect.get_height()
+        ax.annotate('{}'.format(height),
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(offset[xpos]*3, 3),  # use 3 points offset
+                    textcoords="offset points",  # in both directions
+                    ha=ha[xpos], va='bottom')
+
 
     #TO DO:
     #Output all graphs, data, etc to a file or multiple files
