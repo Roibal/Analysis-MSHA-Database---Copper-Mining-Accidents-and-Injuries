@@ -1,7 +1,7 @@
 """
 Created February 12, 2021 by Joaquin Roibal for ME 489
 Team Members: Braci Chester, Julienne Mamaita Essomba, Carlha Barreto
-Updated: 4/13/2021
+Updated: 4/23/2021
 
 The Purpose of this Document is to load Mine Accident Data from MSHA Website (DBF file)
 into a format which can be used to analyze the data with graphs.
@@ -71,6 +71,8 @@ def main():
     bodypart_count = []
     minemach_count = []
     df_acc_list = []
+    hand_list =[]
+    back_list = []
     for i, database in enumerate(mine_data):
         #Load all Data from MSHA DBF file into a Pandas Database
         #transform dbf into pandas dataframe: https://stackoverflow.com/questions/41898561/pandas-transform-a-dbf-table-into-a-dataframe
@@ -113,6 +115,12 @@ def main():
         df_copper['PARTBODY'].replace(body_rep, inplace=True)
         df_copper['MINEMACH'].replace(minemach_rep, inplace=True)
         database_list.append(df_copper)
+        hand_inj = df_copper[df_copper['PARTBODY']=="Hand"]     #Hand Injury was highest body part, further analysis
+        back_inj = df_copper[df_copper['PARTBODY']=="Back"]     #Back Injury was second most common injury
+        print("Number of Hand Injuries: ", len(hand_inj))
+        print("Number of Back Injury: ", len(back_inj))
+        hand_list.append(hand_inj)
+        back_list.append(back_inj)
         df_state_counts = pd.Series(df_copper['STATE']).value_counts()      #Counting Injury Classification
         df_accident_counts = pd.Series(df_copper['ATYPE']).value_counts()
         df_body_counts = pd.Series(df_copper['PARTBODY']).value_counts()
@@ -145,8 +153,26 @@ def main():
     plt.legend()
     plt.show()
 
+    #Create Additional Graphs focusing on two highest injured body part (Hand & Back)
+    back_list_days =[]
+    hand_list_days = []
+    for i in range(0, 10):
+        #Calculate total yearly days missed for back injury and hand injury
+        back_list_days.append(back_list[i]["DAYSLOST"].sum())
+        hand_list_days.append(hand_list[i]["DAYSLOST"].sum())
+    print(back_list_days)
+    print(hand_list_days)
+
+    plt.plot(year_list, back_list_days, label="Back Injury")
+    plt.plot(year_list, hand_list_days, label="Hand Injury")
+    plt.title("Comparing Total Days Lost Per Year Hand Injury v Back Injury, US Copper Mining, 2010-2019")
+    plt.xlabel("Year")
+    plt.ylabel("Total Days Lost")
+    plt.legend()
+    plt.show()
+
     """for g, year in enumerate(minemach_count):
-        plt.hist(year[1][0:10], label=year_list[g], marker='o', linestyle='None')
+        plt.hist(year[1][1:11], label=year_list[g], marker='o', linestyle='None')
     plt.title("Top 10 Yearly Mine Machine Injuries, US Copper Mining, 2010-2019")
     plt.xlabel("Mine Machine")
     plt.ylabel("Number of Injuries")
