@@ -274,6 +274,18 @@ def main():
     plt.grid(False)
     plt.show()
 
+    #Create stacked histogram (bar chart) with age of mine worker and num accidents
+    """prev=0
+    for l, cop in enumerate(database_list):
+        cop['AGE'].hist(label=str(year_list[i]), bottom=prev, linewidth=2) #Creating a Histogram of Miner Age
+        prev+=cop['AGE'].value_counts()
+    plt.title("Histogram of Injured Miner Ages in US Copper Mining Industry, 2010-2019")
+    plt.xlabel("Age of Injured Miner")
+    plt.ylabel("Number of Miners Injured")
+    plt.legend()
+    plt.grid(False)
+    plt.show()"""
+
     for l, cop in enumerate(database_list):
        cop['EXPTOTAL'].hist(label=str(year_list[i]), histtype ='step', linewidth=2) #Creating a Histogram of Miner Experience
     plt.title("Histogram of Injured Miner Experience in US Copper Mining Industry, 2010-2019")
@@ -322,10 +334,6 @@ def main():
     print(injury_count)
     print("Injury Rate: ", inj_rate)
 
-    #To convert to CSV:
-    #dbf.to_csv('test.csv')
-
-
     #Draw Graphs of Data (Total Accidents per Year & Total Copper Mine Accidents per Year)
     fig, ax1 = plt.subplots()
 
@@ -350,6 +358,7 @@ def main():
     print(days_lost_stats)
 
 def autolabel(rects, xpos='center'):
+    #From Matplotlib Example Gallery
     """
     Attach a text label above each bar in *rects*, displaying its height.
 
