@@ -10,7 +10,9 @@ To read more visit here: https://www.researchgate.net/publication/350796732_ANAL
 
 ## MSHA Database Python Code Description
 
-https://raw.githubusercontent.com/Roibal/Analysis-MSHA-Database---Copper-Mining-Accidents-and-Injuries/main/MSHA_Data_Analysis_Program_Description.JPG
+![Image of MSHA Database Python Script Description](
+https://raw.githubusercontent.com/Roibal/Analysis-MSHA-Database---Copper-Mining-Accidents-and-Injuries/main/MSHA_Data_Analysis_Program_Description.JPG)
+
 
 ## About the Code
 
