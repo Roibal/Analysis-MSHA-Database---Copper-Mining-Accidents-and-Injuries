@@ -13,6 +13,8 @@ To read more visit here: https://www.researchgate.net/publication/350796732_ANAL
 ![Image of MSHA Database Python Script Description](
 https://raw.githubusercontent.com/Roibal/Analysis-MSHA-Database---Copper-Mining-Accidents-and-Injuries/main/MSHA_Data_Analysis_Program_Description.JPG)
 
+Which will create graphs / data visualization such as: "Comparing Days Lost Back Injury and Hand Injury, US Copper Mining, 2010-2019"
+
 ![Image of Graph Created by Program: "Comparing Days Lost Back Injury compared Hand Injury, US Copper Mining, 2010-2019"](https://raw.githubusercontent.com/Roibal/Analysis-MSHA-Database---Copper-Mining-Accidents-and-Injuries/main/Total_Days_Lost_Hand_Injury_Back_Injury2010-2019.png)
 
 
