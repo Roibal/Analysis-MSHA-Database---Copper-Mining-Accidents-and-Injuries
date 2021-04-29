@@ -8,6 +8,10 @@ This project was a group project for ME 489: Mine Health and Safety at New Mexic
 
 To read more visit here: https://www.researchgate.net/publication/350796732_ANALYSIS_OF_COPPER_MINING_ACCIDENTS_FROM_2010-2019_Presentation
 
+## MSHA Database Python Code Description
+
+https://raw.githubusercontent.com/Roibal/Analysis-MSHA-Database---Copper-Mining-Accidents-and-Injuries/main/MSHA_Data_Analysis_Program_Description.JPG
+
 ## About the Code
 
 The purpose of this code is to analyze Mine Safety Health Administration (MSHA) Data in order to provide visualizations of a given time period and/or mineral commodity in order to understand trends and areas of safety to improve upon.
